@@ -55,6 +55,23 @@
   .more{text-align:center; padding:16px}
   .more button{padding:12px 28px; font-size:1rem; font-family:inherit; cursor:pointer;
                border:2px solid var(--accent); background:#fff; color:var(--accent); border-radius:10px}
+  /* 地図の小窓 */
+  .mw{position:fixed; inset:0; background:rgba(15,35,55,.55); z-index:50;
+      display:flex; align-items:center; justify-content:center; padding:20px}
+  .mw[hidden]{display:none}
+  .mw-box{background:#fff; border-radius:14px; width:min(760px,100%); max-height:100%;
+          display:flex; flex-direction:column; overflow:hidden; box-shadow:0 18px 50px rgba(0,0,0,.3)}
+  .mw-head{display:flex; align-items:flex-start; gap:12px; padding:16px 18px 10px}
+  .mw-head b{font-size:1.05rem; line-height:1.5}
+  .mw-x{margin-left:auto; border:none; background:none; font-size:1.7rem; line-height:1;
+        color:var(--sub); cursor:pointer; padding:0 4px}
+  .mw-x:hover{color:var(--ink)}
+  .mw-addr{padding:0 18px 12px; color:var(--sub); font-size:.9rem}
+  .mw-box iframe{border:0; width:100%; height:min(58vh,430px); background:#eef2f6}
+  .mw-foot{padding:12px 18px; text-align:right}
+  .mw-foot a{color:var(--accent); font-size:.9rem; font-weight:700; text-decoration:none}
+  .mw-foot a:hover{text-decoration:underline}
+
   .note{margin-top:34px; font-size:.82rem; color:var(--sub); border-top:1px solid var(--line); padding-top:14px}
 </style>
 </head>
@@ -87,6 +104,18 @@
     住所は「とうきぼ」にのっている場所です。おみせや工場がある場所とはちがうことがあります。
   </p>
 </main>
+
+<div class="mw" id="mw" hidden>
+  <div class="mw-box" role="dialog" aria-modal="true" aria-labelledby="mwName">
+    <div class="mw-head">
+      <b id="mwName"></b>
+      <button class="mw-x" id="mwX" aria-label="とじる">&times;</button>
+    </div>
+    <div class="mw-addr" id="mwAddr"></div>
+    <iframe id="mwMap" title="地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="mw-foot"><a id="mwOpen" target="_blank" rel="noopener">Googleマップでひらく →</a></div>
+  </div>
+</div>
 
 <script>
 const CATEGORIES = [
@@ -164,7 +193,8 @@ function render(reset){
     a.textContent = r.area || "";
     a.href = "https://www.google.com/maps/search/?api=1&query=" +
              encodeURIComponent("兵庫県" + toHankaku(r.area || ""));
-    a.title = "Googleマップでひらく";
+    a.title = "地図を見る";
+    a.onclick = ev => { ev.preventDefault(); openMap(r); };
     frag.appendChild(li);
   }
   $("results").appendChild(frag);
@@ -175,6 +205,27 @@ function render(reset){
     $("results").innerHTML = '<div class="empty">みつかりませんでした。<br>べつのことばでさがしてみてね。</div>';
   }
 }
+
+function mapQuery(area){ return encodeURIComponent("兵庫県" + toHankaku(area || "")); }
+
+function openMap(r){
+  $("mwName").textContent = r.name;
+  $("mwAddr").textContent = r.area || "";
+  const q = mapQuery(r.area);
+  $("mwMap").src  = "https://maps.google.com/maps?q=" + q + "&z=16&hl=ja&output=embed";
+  $("mwOpen").href = "https://www.google.com/maps/search/?api=1&query=" + q;
+  $("mw").hidden = false;
+  document.body.style.overflow = "hidden";
+  $("mwX").focus();
+}
+function closeMap(){
+  $("mw").hidden = true;
+  $("mwMap").src = "about:blank";
+  document.body.style.overflow = "";
+}
+$("mwX").addEventListener("click", closeMap);
+$("mw").addEventListener("click", ev => { if (ev.target === $("mw")) closeMap(); });
+document.addEventListener("keydown", ev => { if (ev.key === "Escape" && !$("mw").hidden) closeMap(); });
 
 function buildCats(){
   const counts = {};
