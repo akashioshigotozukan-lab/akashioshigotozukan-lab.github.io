@@ -81,7 +81,10 @@
     .mw-box{border-radius:14px 14px 0 0; box-shadow:0 -10px 40px rgba(10,30,50,.22)}
     @keyframes slidein{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
   }
-  .note{margin-top:34px; font-size:.82rem; color:var(--sub); border-top:1px solid var(--line); padding-top:14px}
+  .note{margin-top:16px; font-size:.84rem; color:var(--sub);
+        background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 18px}
+  .note p{margin:0 0 8px}
+  .note p:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -99,6 +102,19 @@
     <div class="cats" id="cats"></div>
   </div>
 
+  <div class="note">
+    <p>
+      データ出典：国税庁 法人番号公表サイト（全件データ）／明石市オープンデータ。
+      カテゴリは会社名などから自動でわりあてているため、じっさいのしごとの内容とちがう場合があります。
+      住所は「とうきぼ」にのっている場所です。おみせや工場がある場所とはちがうことがあります。
+    </p>
+    <p>オープンデータのため、個人でしごとをしている人はのっていません。</p>
+    <p>
+      個人事業主の方で「あかしおしごとずかん」に掲載をご希望の方は、以下のフォームから登録申請をお願いします。（登録フォーム現在準備中）<br>
+      「あかしおしごとずかん」は、明石のこどもたちに、明石のおしごとを知ってもらい、郷土愛を深めることを目的に運営されています。
+    </p>
+  </div>
+
   <div class="bar">
     <span class="count"><b id="n">0</b> けん みつかりました</span>
     <button class="clear" id="clear" hidden>じょうけんをクリア</button>
@@ -107,11 +123,6 @@
   <ul id="results"></ul>
   <div class="more" id="moreWrap" hidden><button id="more">もっと見る</button></div>
 
-  <p class="note">
-    データ出典：国税庁 法人番号公表サイト（全件データ）／明石市オープンデータ。<br>
-    カテゴリは会社名などから自動でわりあてているため、じっさいのしごとの内容とちがう場合があります。<br>
-    住所は「とうきぼ」にのっている場所です。おみせや工場がある場所とはちがうことがあります。
-  </p>
 </main>
 
 <div class="mw" id="mw" hidden>
