@@ -55,23 +55,39 @@
   .more{text-align:center; padding:16px}
   .more button{padding:12px 28px; font-size:1rem; font-family:inherit; cursor:pointer;
                border:2px solid var(--accent); background:#fff; color:var(--accent); border-radius:10px}
-  /* 地図の小窓 */
-  .mw{position:fixed; inset:0; background:rgba(15,35,55,.55); z-index:50;
-      display:flex; align-items:center; justify-content:center; padding:20px}
+  /* 地図のパネル（右側にドッキング） */
+  .mw{position:fixed; inset:0; background:rgba(15,35,55,.12); z-index:50;
+      display:flex; justify-content:flex-end; align-items:stretch}
   .mw[hidden]{display:none}
-  .mw-box{background:#fff; border-radius:14px; width:min(760px,100%); max-height:100%;
-          display:flex; flex-direction:column; overflow:hidden; box-shadow:0 18px 50px rgba(0,0,0,.3)}
-  .mw-head{display:flex; align-items:flex-start; gap:12px; padding:16px 18px 10px}
-  .mw-head b{font-size:1.05rem; line-height:1.5}
+  .mw-box{background:#fff; width:min(430px,100%); height:100%;
+          display:flex; flex-direction:column; overflow:hidden;
+          border-radius:14px 0 0 14px; box-shadow:-10px 0 40px rgba(10,30,50,.22);
+          animation:slidein .18s ease-out}
+  @keyframes slidein{from{transform:translateX(30px);opacity:.4}to{transform:none;opacity:1}}
+  .mw-head{display:flex; align-items:flex-start; gap:10px; padding:16px 18px 8px}
+  .mw-head b{font-size:1.02rem; line-height:1.5}
   .mw-x{margin-left:auto; border:none; background:none; font-size:1.7rem; line-height:1;
         color:var(--sub); cursor:pointer; padding:0 4px}
   .mw-x:hover{color:var(--ink)}
-  .mw-addr{padding:0 18px 12px; color:var(--sub); font-size:.9rem}
-  .mw-box iframe{border:0; width:100%; height:min(58vh,430px); background:#eef2f6}
-  .mw-foot{padding:12px 18px; text-align:right}
+  .mw-addr{padding:0 18px 12px; color:var(--sub); font-size:.88rem}
+  .mw-box iframe{border:0; width:100%; flex:1; min-height:0; background:#eef2f6}
+  .mw-foot{padding:12px 18px; text-align:right; border-top:1px solid var(--line)}
   .mw-foot a{color:var(--accent); font-size:.9rem; font-weight:700; text-decoration:none}
   .mw-foot a:hover{text-decoration:underline}
+  /* せまい画面では下から出るシートにする */
+  @media (max-width:700px){
+    .mw{align-items:flex-end}
+    .mw-box{width:100%; height:72vh; border-radius:14px 14px 0 0;
+            box-shadow:0 -10px 40px rgba(10,30,50,.22)}
+    @keyframes slidein{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+  }
 
+  @media (min-width:1180px){
+    body.mw-open main, body.mw-open header .wrap{
+      margin-left:max(20px, calc(50% - 480px - 215px));
+      transition:margin-left .18s ease-out;
+    }
+  }
   .note{margin-top:34px; font-size:.82rem; color:var(--sub); border-top:1px solid var(--line); padding-top:14px}
 </style>
 </head>
@@ -216,12 +232,14 @@ function openMap(r){
   $("mwOpen").href = "https://www.google.com/maps/search/?api=1&query=" + q;
   $("mw").hidden = false;
   document.body.style.overflow = "hidden";
+  document.body.classList.add("mw-open");
   $("mwX").focus();
 }
 function closeMap(){
   $("mw").hidden = true;
   $("mwMap").src = "about:blank";
   document.body.style.overflow = "";
+  document.body.classList.remove("mw-open");
 }
 $("mwX").addEventListener("click", closeMap);
 $("mw").addEventListener("click", ev => { if (ev.target === $("mw")) closeMap(); });
