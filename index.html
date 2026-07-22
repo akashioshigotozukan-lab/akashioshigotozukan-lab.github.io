@@ -15,14 +15,14 @@
     font-family:"Hiragino Kaku Gothic ProN","Yu Gothic UI","Meiryo",system-ui,sans-serif;
     line-height:1.7;
   }
-  header{background:linear-gradient(135deg,#0b7fbe,#39b0d6); color:#fff; padding:28px 20px 34px}
+  header{background:#fff; padding:20px 20px 30px}
   .wrap{max-width:960px; margin:0 auto}
-  .titlerow{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap}
-  h1{margin:0 0 6px; font-size:1.9rem; letter-spacing:.02em}
-  .total{font-size:.95rem; background:rgba(255,255,255,.18); border-radius:999px;
-         padding:4px 14px; white-space:nowrap}
-  .total b{font-size:1.15rem}
-  header p{margin:0; opacity:.92; font-size:.95rem}
+  .logo{display:block; width:min(540px,84%); height:auto; margin:0 0 10px}
+  .subrow{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+  header p{margin:0; color:var(--sub); font-size:.95rem}
+  .total{font-size:.9rem; background:var(--accent-soft); color:var(--accent);
+         border-radius:999px; padding:4px 14px; white-space:nowrap}
+  .total b{font-size:1.1rem}
   main{max-width:960px; margin:0 auto; padding:0 20px 60px}
 
   .panel{background:var(--card); border:1px solid var(--line); border-radius:14px;
@@ -95,11 +95,11 @@
 
 <header>
   <div class="wrap">
-    <div class="titlerow">
-      <h1>あかし おしごとずかん</h1>
+    <img class="logo" src="logo.png" alt="あかし おしごとずかん" width="1000" height="333">
+    <div class="subrow">
+      <p>明石には、どんなおしごとがあるのかな？　さがしてみよう。</p>
       <span class="total">あかしの会社ぜんぶで <b id="total">0</b> 個</span>
     </div>
-    <p>明石には、どんなおしごとがあるのかな？　さがしてみよう。</p>
   </div>
 </header>
 
